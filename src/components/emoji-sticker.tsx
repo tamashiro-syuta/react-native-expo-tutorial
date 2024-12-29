@@ -1,5 +1,5 @@
 import { type FC } from "react";
-import { Animated, Image, View, type ImageSourcePropType } from "react-native";
+import { Animated, View, type ImageSourcePropType } from "react-native";
 
 type EmojiStickerProps = {
   stickerSource: ImageSourcePropType | undefined;
