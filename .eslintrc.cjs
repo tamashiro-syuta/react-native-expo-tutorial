@@ -4,7 +4,7 @@ const config = {
   parserOptions: {
     project: true,
   },
-  plugins: ["@typescript-eslint"],
+  plugins: ["@typescript-eslint", "unused-imports"],
   extends: [
     // @see https://github.com/expo/expo/blob/main/packages/eslint-config-expo/.eslintrc.js
     "expo",
@@ -16,6 +16,8 @@ const config = {
     "plugin:@typescript-eslint/stylistic-type-checked",
   ],
   rules: {
+    "unused-imports/no-unused-imports": "error",
+
     // @see https://typescript-eslint.io/rules/array-type
     "@typescript-eslint/array-type": "off",
 
