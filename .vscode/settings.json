@@ -48,5 +48,6 @@
   "typescript.enablePromptUseWorkspaceTsdk": true,
 
   // TypeScriptのバージョンとして、プロジェクトのnode_modulesディレクトリにインストールされたものを使用
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "cSpell.words": ["Pressable"]
 }
