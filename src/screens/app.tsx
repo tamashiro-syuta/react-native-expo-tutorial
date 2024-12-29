@@ -1,11 +1,17 @@
 import { useRef, useState } from "react";
-import { StyleSheet, View, type ImageSourcePropType } from "react-native";
+import {
+  Platform,
+  StyleSheet,
+  View,
+  type ImageSourcePropType,
+} from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { captureRef } from "react-native-view-shot";
 import { registerRootComponent } from "expo";
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
 import { StatusBar } from "expo-status-bar";
+import domtoimage from "dom-to-image";
 
 import { Button } from "@/components/button";
 import { CircleButton } from "@/components/circle-button";
@@ -29,7 +35,7 @@ const App = () => {
 
   // NOTE: 写真へのアクセス権限の取得
   const [status, requestPermission] = MediaLibrary.usePermissions();
-  const imageRef = useRef<View>(null);
+  const imageRef = useRef(null);
   if (status === null) {
     void requestPermission();
   }
@@ -47,18 +53,40 @@ const App = () => {
   };
 
   const onSaveImageAsync = async () => {
-    try {
-      const localUri = await captureRef(imageRef, {
-        height: 440,
-        quality: 1,
-      });
+    // NOTE: 実行環境によって保存方法を変更
+    if (Platform.OS !== "web") {
+      if (imageRef.current) {
+        try {
+          const localUri = await captureRef(imageRef, {
+            height: 440,
+            quality: 1,
+          });
 
-      await MediaLibrary.saveToLibraryAsync(localUri);
-      if (localUri) {
-        alert("保存しました!");
+          await MediaLibrary.saveToLibraryAsync(localUri);
+          if (localUri) {
+            alert("保存しました!");
+          }
+        } catch (e) {
+          console.log(e);
+        }
       }
-    } catch (e) {
-      console.log(e);
+    } else {
+      if (imageRef.current) {
+        try {
+          const dataUrl = await domtoimage.toJpeg(imageRef.current, {
+            quality: 0.95,
+            width: 320,
+            height: 440,
+          });
+
+          const link = document.createElement("a");
+          link.download = "sticker-smash.jpeg";
+          link.href = dataUrl;
+          link.click();
+        } catch (e) {
+          console.log(e);
+        }
+      }
     }
   };
 
